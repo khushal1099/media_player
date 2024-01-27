@@ -8,9 +8,8 @@ import '../util.dart';
 
 class DetailPage extends StatefulWidget {
   // final Audio audio;'
-  int index = 0;
 
-   DetailPage({required this.index, super.key});
+  const DetailPage({super.key});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -216,7 +215,7 @@ class _DetailPageState extends State<DetailPage> {
                                 if (playing) {
                                   assetsAudioPlayer.pause();
                                 } else {
-                                  assetsAudioPlayer.playlistPlayAtIndex(widget.index);
+                                  assetsAudioPlayer.play();
                                 }
                                 Provider.of<MediaProvider>(context,
                                         listen: false)

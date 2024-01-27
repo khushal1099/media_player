@@ -71,11 +71,11 @@ class _HomePageState extends State<FirstPage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) {
-                                        return DetailPage(index: index);
+                                        return DetailPage();
                                       },
                                     ),
                                   );
-                                  // assetsAudioPlayer.playlistPlayAtIndex(index);
+                                  assetsAudioPlayer.playlistPlayAtIndex(index);
                                 },
                                 child: Column(
                                   children: [
@@ -140,11 +140,11 @@ class _HomePageState extends State<FirstPage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return DetailPage(index: index);
+                                      return DetailPage();
                                     },
                                   ),
                                 );
-                                // assetsAudioPlayer.playlistPlayAtIndex(index);
+                                assetsAudioPlayer.playlistPlayAtIndex(index);
                               },
                               child: Column(
                                 children: [
@@ -206,10 +206,11 @@ class _HomePageState extends State<FirstPage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return DetailPage(index: index);
+                                      return DetailPage();
                                     },
                                   ),
                                 );
+                                assetsAudioPlayer.playlistPlayAtIndex(index);
                               },
                               child: Column(
                                 children: [
@@ -324,6 +325,63 @@ class _HomePageState extends State<FirstPage> {
                             height: 70,
                             width: 70,
                             color: Colors.grey,
+                            child: Image.network(path),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  title,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                Text(
+                                  album,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                StreamBuilder<Duration>(
+                                  stream: assetsAudioPlayer.currentPosition,
+                                  builder: (context, snapshot) {
+                                    var sec = snapshot.data?.inSeconds ?? 0;
+                                    var min = snapshot.data?.inMinutes ?? 0;
+                                    return StreamBuilder<Playing?>(
+                                      stream: assetsAudioPlayer.current,
+                                      builder: (context, snapshot) {
+                                        var duration = snapshot.data?.audio.duration;
+                                        if (duration != null) {
+                                          return Row(
+                                            children: [
+                                              Slider(
+                                                value: sec.toDouble(),
+                                                max: (duration.inSeconds).toDouble(),
+                                                onChanged: (value) {
+                                                  print("value $value");
+                                                  assetsAudioPlayer
+                                                      .seek(Duration(seconds: value.toInt()));
+                                                },
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  "${min % 60}:${sec % 60}",
+                                                  style: TextStyle(
+                                                      color: Colors.white, fontSize: 20),
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        } else {
+                                          return SizedBox.shrink();
+                                        }
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       );

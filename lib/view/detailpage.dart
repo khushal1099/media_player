@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:media_player/controller/media_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../main.dart';
 import '../util.dart';
 
 class DetailPage extends StatefulWidget {
-  final Audio audio;
+  // final Audio audio;'
+  int index = 0;
 
-  const DetailPage({required this.audio, super.key});
+   DetailPage({required this.index, super.key});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -20,18 +20,6 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: SizedBox(),
-        title: Text(
-          "Media Player",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),
-        ),
-        centerTitle: true,
-        elevation: 0,
-      ),
       body: Stack(
         children: [
           Container(
@@ -46,14 +34,15 @@ class _DetailPageState extends State<DetailPage> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 130, bottom: 30),
+                  padding: const EdgeInsets.only(top: 100, bottom: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          Provider.of<MediaProvider>(context,listen: false).refresh();
+                          Provider.of<MediaProvider>(context, listen: false)
+                              .refresh();
                         },
                         icon: Center(
                           child: Icon(
@@ -80,23 +69,10 @@ class _DetailPageState extends State<DetailPage> {
                     ],
                   ),
                 ),
-                // Center(
-                //   child: Container(
-                //     clipBehavior: Clip.antiAlias,
-                //     height: MediaQuery.sizeOf(context).height * 0.4,
-                //     width: MediaQuery.sizeOf(context).width * 0.9,
-                //     decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.circular(20),
-                //     ),
-                //     child: Image.network(
-                //       widget.audio.metas.image?.path ?? "",
-                //       fit: BoxFit.cover,
-                //     ),
-                //   ),
-                // ),
                 StreamBuilder<Playing?>(
                   stream: assetsAudioPlayer.current,
-                  builder: (BuildContext context, AsyncSnapshot<Playing?> snapshot) {
+                  builder:
+                      (BuildContext context, AsyncSnapshot<Playing?> snapshot) {
                     var currentSong = snapshot.data?.audio;
                     if (currentSong != null) {
                       return Column(
@@ -110,7 +86,7 @@ class _DetailPageState extends State<DetailPage> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Image.network(
-                                currentSong.audio.metas.image?.path??"",
+                                currentSong.audio.metas.image?.path ?? "",
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -119,7 +95,8 @@ class _DetailPageState extends State<DetailPage> {
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
                               currentSong.audio.metas.title ?? "",
-                              style: TextStyle(color: Colors.white, fontSize: 25),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 25),
                             ),
                           ),
                           Text(
@@ -137,32 +114,23 @@ class _DetailPageState extends State<DetailPage> {
                     }
                   },
                 ),
-                  
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(21),
-                      child: StreamBuilder<Playing?>(
-                        stream: assetsAudioPlayer.current,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<Playing?> snapshot) {
-                          var song = snapshot.data?.playlist.current;
-                          if (recentplaysongs.contains(song)) {
-                            print("Already");
-                          } else if (song != null) {
-                            print("object ${song.metas.title}");
-                            recentplaysongs.add(song);
-                            SchedulerBinding.instance
-                                .addPostFrameCallback((timeStamp) {
-                              setState(() {});
-                            });
-                          }
-                          return SizedBox();
-                        },
-                      ),
-                    ),
-                  
-                  ],
+                StreamBuilder<Playing?>(
+                  stream: assetsAudioPlayer.current,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<Playing?> snapshot) {
+                    var song = snapshot.data?.playlist.current;
+                    if (recentplaysongs.contains(song)) {
+                      print("Already");
+                    } else if (song != null) {
+                      print("object ${song.metas.title}");
+                      recentplaysongs.add(song);
+                      SchedulerBinding.instance
+                          .addPostFrameCallback((timeStamp) {
+                        setState(() {});
+                      });
+                    }
+                    return SizedBox();
+                  },
                 ),
                 StreamBuilder<Duration>(
                   stream: assetsAudioPlayer.currentPosition,
@@ -189,7 +157,11 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text("${min % 60}:${sec % 60}",style: TextStyle(color: Colors.white,fontSize: 20),),
+                                child: Text(
+                                  "${min % 60}:${sec % 60}",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
                               )
                             ],
                           );
@@ -205,7 +177,10 @@ class _DetailPageState extends State<DetailPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Provider.of<MediaProvider>(context, listen: false)
+                            .restartCurrentSong();
+                      },
                       icon: Icon(
                         Icons.repeat,
                         size: 30,
@@ -241,9 +216,11 @@ class _DetailPageState extends State<DetailPage> {
                                 if (playing) {
                                   assetsAudioPlayer.pause();
                                 } else {
-                                  assetsAudioPlayer.play();
+                                  assetsAudioPlayer.playlistPlayAtIndex(widget.index);
                                 }
-                                setState(() {});
+                                Provider.of<MediaProvider>(context,
+                                        listen: false)
+                                    .refresh();
                               },
                               icon: Icon(
                                 playing ? Icons.pause : Icons.play_arrow,

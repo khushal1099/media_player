@@ -1,9 +1,11 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:media_player/controller/media_provider.dart';
-import 'package:media_player/view/homepage.dart';
+import 'package:media_player/view/firstpage.dart';
 import 'package:provider/provider.dart';
+
 var assetsAudioPlayer = AssetsAudioPlayer.newPlayer();
+
 void main() {
   runApp(
     MyApp(),
@@ -29,7 +31,7 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: HomePage(),
+          home: FirstPage(),
         );
       },
     );

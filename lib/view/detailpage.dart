@@ -9,14 +9,13 @@ import '../util.dart';
 class DetailPage extends StatefulWidget {
   int index;
 
-  DetailPage({super.key,required this.index});
+  DetailPage({super.key, required this.index});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
-
   @override
   void initState() {
     assetsAudioPlayer.playlistPlayAtIndex(widget.index);
@@ -188,7 +187,7 @@ class _DetailPageState extends State<DetailPage> {
                       },
                       icon: Icon(
                         Icons.repeat,
-                        size: 30,
+                        size: 25,
                         color: Colors.white,
                       ),
                     ),
@@ -218,17 +217,7 @@ class _DetailPageState extends State<DetailPage> {
                             }
                             return IconButton(
                               onPressed: () {
-                                print(assetsAudioPlayer.isPlaying.value);
                                 assetsAudioPlayer.playOrPause();
-                                // if (playing) {
-                                //   assetsAudioPlayer.pause();
-                                // } else {
-                                //    assetsAudioPlayer.play();
-                                // }
-
-                                // Provider.of<MediaProvider>(context,
-                                //         listen: false)
-                                //     .refresh();
                               },
                               icon: Icon(
                                 playing ? Icons.pause : Icons.play_arrow,
@@ -247,14 +236,6 @@ class _DetailPageState extends State<DetailPage> {
                       },
                       icon: Icon(
                         Icons.skip_next,
-                        size: 35,
-                        color: Colors.white,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.add,
                         size: 35,
                         color: Colors.white,
                       ),

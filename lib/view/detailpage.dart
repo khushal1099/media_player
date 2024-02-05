@@ -218,6 +218,7 @@ class _DetailPageState extends State<DetailPage> {
                             return IconButton(
                               onPressed: () {
                                 assetsAudioPlayer.playOrPause();
+                                assetsAudioPlayer.showNotification;
                               },
                               icon: Icon(
                                 playing ? Icons.pause : Icons.play_arrow,

@@ -10,6 +10,7 @@ class VideoPage extends StatefulWidget {
 }
 
 class _VideoPageState extends State<VideoPage> {
+
   VideoPlayerController? contoller;
   ChewieController? chewieController;
   List<String> audio = [
@@ -22,11 +23,6 @@ class _VideoPageState extends State<VideoPage> {
     "Ruthe to Khuda Ruthe..",
     "KuchhBhi Nahi hai Ye Jaha"
   ];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
